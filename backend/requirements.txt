@@ -1,0 +1,17 @@
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+sqlalchemy==2.0.36
+pydantic==2.10.3
+pydantic-settings==2.6.1
+bcrypt==4.2.1
+PyJWT==2.10.1
+python-multipart==0.0.19
+# ML inference (model is trained in Stage 5; the API still runs without a model file)
+numpy==2.2.0
+scikit-learn==1.6.0
+joblib==1.4.2
+httpx==0.28.1          # Twilio REST calls (also used by the test client)
+tzdata==2024.2         # timestamp time zones on Windows (SMS_TIMEZONE)
+# tests
+pandas==2.2.3   # used only by the ML integration test (ml/ scripts need it anyway)
+pytest==8.3.4

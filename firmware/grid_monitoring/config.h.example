@@ -1,0 +1,35 @@
+// Copy this file to config.h (same folder) and edit. NEVER commit config.h: it holds Wi-Fi and device secrets.
+#pragma once
+
+// ---------------- network ----------------
+#define WIFI_SSID        "your-wifi-name"
+#define WIFI_PASSWORD    "your-wifi-password"
+
+// Base URL of the FastAPI backend, no trailing slash. Use your PC's LAN IP, not "localhost".
+//   http://192.168.1.50:8000   plain HTTP: acceptable only on a trusted private LAN
+//   https://grid.example.com   TLS: also define ROOT_CA_PEM below (the sketch never skips certificate checks)
+#define SERVER_BASE      "http://192.168.1.50:8000"
+
+// Device API key printed ONCE by backend/seed.py (or by "Rotate" in Device Management).
+#define DEVICE_KEY       "gmk_paste-the-key-here"
+
+// Only needed for https:// SERVER_BASE
+// #define ROOT_CA_PEM  "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----\n"
+
+// ---------------- calibration: MEASURE these on your hardware (report, section 3.4 / 3.5) ----------------
+// Voltage sensor module: V_supply = V_at_GPIO34 * V_RATIO. Typical 0-25 V module = 5.0. Check against a multimeter.
+#define V_RATIO          5.0f
+// ACS712-5A through the 10k/10k divider: pin voltage at 0 A (~1.25 V) and volts-per-amp at the pin (~0.0925).
+#define I_ZERO_V         1.25f
+#define I_SENS_V_PER_A   0.0925f
+// Readings with |I| below this are shown as 0 A. The ACS712-5A resolves only ~9 mA per ADC count, so LED-level
+// currents are unreliable; leave at 0 until you have characterised your own noise floor.
+#define I_DEADBAND_A     0.0f
+
+// ---------------- timing (ms) ----------------
+#define SAMPLE_MS        500     // measure + serial print
+#define TELEMETRY_MS     1000    // POST /api/device/telemetry
+#define HEARTBEAT_MS     5000    // POST /api/device/heartbeat
+#define COMMAND_POLL_MS  1000    // GET  /api/device/commands/next
+#define LCD_PAGE_MS      2000
+#define HTTP_TIMEOUT_MS  2000

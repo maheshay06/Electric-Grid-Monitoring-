@@ -1,0 +1,112 @@
+{
+  "model_version": "synthetic-rf-v1",
+  "algorithm": "Random Forest",
+  "trained_at": "2026-10-30T19:51:23.749741+00:00",
+  "sklearn_version": "1.6.0",
+  "features": [
+    "voltage",
+    "current",
+    "power"
+  ],
+  "train_samples": 8000,
+  "test_samples": 2000,
+  "accuracy": 0.9695,
+  "macro_f1": 0.9695402847005432,
+  "cv_accuracy_mean": 0.97575,
+  "cv_accuracy_std": 0.002351860965278348,
+  "per_class": {
+    "NORMAL": {
+      "precision": 0.9376558603491272,
+      "recall": 0.94,
+      "f1": 0.9388264669163545,
+      "support": 400
+    },
+    "UNDERVOLTAGE": {
+      "precision": 0.9725,
+      "recall": 0.9725,
+      "f1": 0.9725,
+      "support": 400
+    },
+    "OVERVOLTAGE": {
+      "precision": 0.9727722772277227,
+      "recall": 0.9825,
+      "f1": 0.9776119402985075,
+      "support": 400
+    },
+    "OVERCURRENT": {
+      "precision": 0.9655172413793104,
+      "recall": 0.98,
+      "f1": 0.9727047146401985,
+      "support": 400
+    },
+    "ABNORMAL CONDITION": {
+      "precision": 1.0,
+      "recall": 0.9725,
+      "f1": 0.9860583016476553,
+      "support": 400
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "NORMAL",
+      "UNDERVOLTAGE",
+      "OVERVOLTAGE",
+      "OVERCURRENT",
+      "ABNORMAL CONDITION"
+    ],
+    "matrix": [
+      [
+        376,
+        9,
+        11,
+        4,
+        0
+      ],
+      [
+        11,
+        389,
+        0,
+        0,
+        0
+      ],
+      [
+        6,
+        0,
+        393,
+        1,
+        0
+      ],
+      [
+        8,
+        0,
+        0,
+        392,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        9,
+        389
+      ]
+    ]
+  },
+  "disclaimer": "Trained and evaluated on SYNTHETIC demo data only. These figures describe performance on generated samples, not on real hardware measurements, and must not be quoted as real-world accuracy.",
+  "feature_importance": {
+    "voltage": 0.5487909968757085,
+    "current": 0.2382533712459092,
+    "power": 0.21295563187838235
+  },
+  "dataset": {
+    "generated_at": "2026-10-30T19:51:19.322082+00:00",
+    "rows": 10000,
+    "class_counts": {
+      "OVERCURRENT": 2000,
+      "OVERVOLTAGE": 2000,
+      "NORMAL": 2000,
+      "UNDERVOLTAGE": 2000,
+      "ABNORMAL CONDITION": 2000
+    }
+  }
+}

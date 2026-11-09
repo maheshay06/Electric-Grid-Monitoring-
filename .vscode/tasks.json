@@ -1,0 +1,61 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup (first time)",
+      "type": "shell",
+      "windows": { "command": "powershell -ExecutionPolicy Bypass -File ${workspaceFolder}\\scripts\\setup.ps1" },
+      "linux": { "command": "bash ${workspaceFolder}/scripts/setup.sh" },
+      "osx": { "command": "bash ${workspaceFolder}/scripts/setup.sh" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Backend: run API (port 8000)",
+      "type": "shell",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "windows": { "command": "..\\.venv\\Scripts\\python.exe -m uvicorn app.main:app --reload --port 8000" },
+      "linux": { "command": "../.venv/bin/python -m uvicorn app.main:app --reload --port 8000" },
+      "osx": { "command": "../.venv/bin/python -m uvicorn app.main:app --reload --port 8000" },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Frontend: run dashboard (port 5173)",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Run everything",
+      "dependsOn": ["Backend: run API (port 8000)", "Frontend: run dashboard (port 5173)"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Backend: seed database",
+      "type": "shell",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "windows": { "command": "..\\.venv\\Scripts\\python.exe seed.py" },
+      "linux": { "command": "../.venv/bin/python seed.py" },
+      "osx": { "command": "../.venv/bin/python seed.py" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Backend: run tests",
+      "type": "shell",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "windows": { "command": "..\\.venv\\Scripts\\python.exe -m pytest app/tests -q" },
+      "linux": { "command": "../.venv/bin/python -m pytest app/tests -q" },
+      "osx": { "command": "../.venv/bin/python -m pytest app/tests -q" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Frontend: type-check and build",
+      "type": "shell",
+      "command": "npm run build",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": []
+    }
+  ]
+}
