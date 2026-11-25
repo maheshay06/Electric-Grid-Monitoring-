@@ -71,6 +71,13 @@ grid-monitor/
 Other tasks in the same menu: *Backend: run tests*, *Backend: seed database*, *Frontend: type-check and build*. **Run > Backend: FastAPI (debug)** starts the API under the debugger.
 Select the `.venv` interpreter (Python: Select Interpreter) if VS Code does not pick it automatically. Secrets stay in `backend/.env`, which is git-ignored and never copied by these scripts.
 
+## Connect the ESP32 (LAN)
+
+1. Backend must listen on the network: the VS Code task *Backend: run API* now uses `--host 0.0.0.0`. Allow port 8000 once (admin PowerShell): `New-NetFirewallRule -DisplayName "Grid Monitor API" -Direction Inbound -Protocol TCP -LocalPort 8000 -Action Allow -Profile Private`.
+2. In `firmware/grid_monitoring/config.h` set `SERVER_BASE` to **this PC's** LAN address (`http://<PC-IP>:8000`), plus Wi-Fi and the device key printed by `seed.py` (or *Rotate* in Device Management). The ESP32's own address goes in `backend/.env` as `DEVICE_IP`.
+3. Check the link: `powershell -ExecutionPolicy Bypass -File scripts\check-link.ps1 -DeviceKey gmk_...` (read-only). Device Management then shows *Online*, *Ping OK* and whether the ESP32's reported IP matches `DEVICE_IP`.
+4. Turn **Demo Mode off** to see real data. Give the PC and the ESP32 fixed addresses in your router so they do not change.
+
 ## Setup
 
 Open three terminals (backend, frontend, and one for the ML / firmware steps).
@@ -269,7 +276,8 @@ The backend suite includes `test_ai_model.py`, which needs `pandas` and `scikit-
 | ESP32: `x` link indicator, serial shows request errors | Wrong `SERVER_BASE` IP, firewall, backend not bound to `0.0.0.0`, or different Wi-Fi network. |
 | Trip command stays `SENT` then `TIMEOUT` | Device offline or not polling. State is intentionally unchanged. |
 | Current reads noisy / non-zero with no load | Re-measure `I_ZERO_V`; ACS712-5A resolution is ~9 mA. |
-| `SENSOR ERR` on LCD | Reading outside 0–6 V / ±5 A — check wiring, divider and `V_RATIO`. |
+| `V: SENSOR ERR` / `I: SENSOR ERR` on LCD | Voltage or current outside physical range (0–8 V / ±5 A). Check voltage sensor GND and `S` pin (GPIO34), ACS712 5V supply and 10k/10k divider (GPIO35). If bench-testing without ACS712, set `I_ZERO_V` to 0.0f and `I_DEADBAND_A` to 0.1f in `config.h`. |
+| Power shows 0.00 W or `---` | Power is $P = V \times I$. If load is disconnected or relay is tripped, $I = 0$ A so $P = 0$ W. If either sensor has an error, telemetry is paused until both sensors read within valid limits. |
 
 ## Mapping to the report
 
@@ -290,3 +298,5 @@ The backend suite includes `test_ai_model.py`, which needs `pandas` and `scikit-
 - Single real feeder, single device; multi-feeder control is only exercised in Demo Mode.
 - SMS goes through Twilio only (no GSM module); no delivery-receipt tracking, no inbound SMS commands. Database upgrades are limited to an automatic additive SQLite column migration (`app/migrate.py`; no Alembic), no email / SSO / two-factor login, no automatic purge of old live readings.
 - The synthetic classifier cannot tell you anything about real faults on your hardware.
+#   E l e c t r i c - G r i d - M o n i t o r i n g -  
+ 
